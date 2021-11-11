@@ -3,6 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Models\Booking;
+use App\Rules\DateMustBeInTheFuture;
+use App\Rules\GreaterThanDateTime;
+use App\Rules\LessThanDateTime;
+use App\Rules\MustBeginAt8AM;
+use App\Rules\MustEndAt5PM;
+use App\Rules\NoExistingBooking;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -35,21 +41,27 @@ class BookingRequest extends FormRequest
             'room' => [
                 'required',
                 Rule::exists('rooms', 'id'),
+                new NoExistingBooking($this->date, $this->from, $this->to)
             ],
 
             'date' => [
                 'required',
                 'date_format:Y-m-d',
-            ],
-
-            'to' => [
-                'required',
-                'date_format:H:i',
+                new DateMustBeInTheFuture
             ],
 
             'from' => [
                 'required',
                 'date_format:H:i',
+                new LessThanDateTime($this->date, $this->to),
+                new MustBeginAt8AM($this->date)
+            ],
+
+            'to' => [
+                'required',
+                'date_format:H:i',
+                new GreaterThanDateTime($this->date, $this->from),
+                new MustEndAt5PM($this->date)
             ],
         ];
     }

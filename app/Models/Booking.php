@@ -9,6 +9,12 @@ class Booking extends Model
 {
     use HasFactory;
 
+    protected $casts = [
+        'date' => 'datetime',
+        'from' => 'datetime',
+        'to' => 'datetime',
+    ];
+
     public function room()
     {
         return $this->belongsTo(Room::class, 'room_id');

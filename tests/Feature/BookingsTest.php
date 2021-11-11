@@ -47,20 +47,22 @@ class BookingsTest extends TestCase
     {
         $this->actingAs($user = User::factory()->create());
 
+        $this->withExceptionHandling();
+
         $room = Room::factory()->create();
 
         $this->postJson(route('bookings.store'), [
             'room' => $room->id,
-            'date' => $date = Carbon::now()->format('d-m-Y'),
-            'to' => $to = Carbon::now()->format('H:i'),
-            'from' => $from = Carbon::now()->addHour()->format('H:i'),
+            'date' => $date = Carbon::now()->addDays(2)->startOfDay()->format('Y-m-d'),
+            'from' => $from = Carbon::now()->addDays(2)->startOfDay()->addHour(10)->format('H:i'),
+            'to' => $to = Carbon::now()->addDays(2)->startOfDay()->addHours(15)->format('H:i'),
         ]);
 
         $this->assertDatabaseHas('bookings', [
             'room_id' => $room->id,
-            'date' => $date,
-            'to' => $to,
-            'from' => $from,
+            'date' => Carbon::now()->addDays(2)->startOfDay()->format('Y-m-d H:i:s'),
+            'from' => Carbon::now()->addDays(2)->startOfDay()->addHour(10)->format('Y-m-d H:i:s'),
+            'to' => Carbon::now()->addDays(2)->startOfDay()->addHours(15)->format('Y-m-d H:i:s'),
             'created_by' => $user->id,
         ]);
     }
@@ -108,16 +110,16 @@ class BookingsTest extends TestCase
 
         $this->patchJson(route('bookings.update', ['booking' => $booking->id]), [
             'room' => $booking->room_id,
-            'date' => $date = Carbon::now()->format('d-m-Y'),
-            'to' => $to = Carbon::now()->format('H:i'),
-            'from' => $from = Carbon::now()->addHour()->format('H:i'),
+            'date' => $date = Carbon::now()->addDays(2)->startOfDay()->format('Y-m-d'),
+            'from' => $from = Carbon::now()->addDays(2)->startOfDay()->addHour(10)->format('H:i'),
+            'to' => $to = Carbon::now()->addDays(2)->startOfDay()->addHours(15)->format('H:i'),
         ]);
 
         $this->assertDatabaseHas('bookings', [
             'room_id' => $booking->room_id,
-            'date' => $date,
-            'to' => $to,
-            'from' => $from,
+            'date' => Carbon::now()->addDays(2)->startOfDay()->format('Y-m-d H:i:s'),
+            'from' => Carbon::now()->addDays(2)->startOfDay()->addHour(10)->format('Y-m-d H:i:s'),
+            'to' => Carbon::now()->addDays(2)->startOfDay()->addHours(15)->format('Y-m-d H:i:s'),
             'created_by' => $user->id,
         ]);
     }
