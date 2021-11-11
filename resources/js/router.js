@@ -17,6 +17,21 @@ const router = new VueRouter({
             component: () => import("@pages/bookings/Index"),
             name: "bookings.index",
         },
+        {
+            path: "/bookings/store",
+            component: () => import("@pages/bookings/Form"),
+            name: "bookings.store",
+        },
+        {
+            path: "/bookings/:id",
+            component: () => import("@pages/bookings/Details"),
+            name: "bookings.show",
+        },
+        {
+            path: "/bookings/:id/update",
+            component: () => import("@pages/bookings/Form"),
+            name: "bookings.update",
+        },
     ],
 });
 

@@ -19,8 +19,8 @@ class BookingFactory extends Factory
         return [
             'room_id' => Room::factory(),
             'date' => Carbon::now(),
-            'to' => Carbon::now()->format('H:i'),
-            'from' => Carbon::now()->addHour()->format('H:i'),
+            'from' => Carbon::now(),
+            'to' => Carbon::now()->addHour(),
             'created_by' => User::factory(),
         ];
     }

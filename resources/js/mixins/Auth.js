@@ -2,15 +2,21 @@ export default {
     data() {
         return {
             auth: {
-                user: null,
+                user: {},
             },
         };
     },
 
-    created() {
+    mounted() {
         axios.get("/api/authenticated-user").then(({ data }) => {
             this.auth.user = data.data;
         });
+    },
+
+    computed: {
+        isAuthenticated() {
+            return !!this.auth.user.id;
+        },
     },
 
     methods: {

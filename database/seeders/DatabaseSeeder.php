@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         RoomSeeder::run();
         UserSeeder::run();
+        BookingSeeder::run();
     }
 }

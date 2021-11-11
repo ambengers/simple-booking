@@ -53,6 +53,77 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
@@ -70,6 +141,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   filters: {
     formatDate: function formatDate(date) {
       return moment(date).format("DD-MM-Y");
+    },
+    formatTime: function formatTime(time) {
+      return moment(time).format("HH:MM a");
     }
   },
   methods: {
@@ -88,24 +162,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         var data = _ref.data;
         _this.bookings = data;
       });
-    },
-    destroy: function destroy() {
-      var _this2 = this;
-
-      var id = this.resourceToDestroy.id;
-      return axios["delete"]("/api/bookings/".concat(id, "/destroy")).then(function () {
-        _this2.bookings.data.splice(_this2.resourceToDestroy, 1);
-
-        _this2.closeDeleteModal();
-      });
-    },
-    openDeleteModal: function openDeleteModal(booking) {
-      this.resourceToDestroy = booking;
-      this.deleting = true;
-    },
-    closeDeleteModal: function closeDeleteModal() {
-      this.resourceToDestroy = null;
-      this.deleting = false;
     },
     goToPage: function goToPage(page) {
       this.getbookings(page);
@@ -202,6 +258,28 @@ var render = function () {
   return _c(
     "layout",
     [
+      _vm.isAuthenticated
+        ? _c(
+            "div",
+            { staticClass: "mb-4" },
+            [
+              _c(
+                "router-link",
+                {
+                  staticClass: "btn btn-primary",
+                  attrs: {
+                    to: {
+                      name: "bookings.store",
+                    },
+                  },
+                },
+                [_vm._v("\n            Create Booking\n        ")]
+              ),
+            ],
+            1
+          )
+        : _vm._e(),
+      _vm._v(" "),
       _c(
         "table",
         {
@@ -241,11 +319,19 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center px-2" }, [
-                      _vm._v(_vm._s(booking.from)),
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm._f("formatTime")(booking.from)) +
+                          "\n                "
+                      ),
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center px-2" }, [
-                      _vm._v(_vm._s(booking.to)),
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm._f("formatTime")(booking.to)) +
+                          "\n                "
+                      ),
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center px-2" }, [
@@ -257,7 +343,98 @@ var render = function () {
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center px-2" }, [
-                      _vm._v(" "),
+                      _c(
+                        "div",
+                        { staticClass: "flex justify-center space-x-2" },
+                        [
+                          _c(
+                            "router-link",
+                            {
+                              staticClass: "text-gray-400",
+                              attrs: {
+                                to: {
+                                  name: "bookings.show",
+                                  params: { id: booking.id },
+                                },
+                              },
+                            },
+                            [
+                              _c(
+                                "svg",
+                                {
+                                  staticClass: "h-6 w-6",
+                                  attrs: {
+                                    xmlns: "http://www.w3.org/2000/svg",
+                                    fill: "none",
+                                    viewBox: "0 0 24 24",
+                                    stroke: "currentColor",
+                                  },
+                                },
+                                [
+                                  _c("path", {
+                                    attrs: {
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round",
+                                      "stroke-width": "2",
+                                      d: "M15 12a3 3 0 11-6 0 3 3 0 016 0z",
+                                    },
+                                  }),
+                                  _vm._v(" "),
+                                  _c("path", {
+                                    attrs: {
+                                      "stroke-linecap": "round",
+                                      "stroke-linejoin": "round",
+                                      "stroke-width": "2",
+                                      d: "M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z",
+                                    },
+                                  }),
+                                ]
+                              ),
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _vm.isAuthenticated &&
+                          _vm.auth.user.id == booking.created_by
+                            ? _c(
+                                "router-link",
+                                {
+                                  staticClass: "text-gray-400",
+                                  attrs: {
+                                    to: {
+                                      name: "bookings.update",
+                                      params: { id: booking.id },
+                                    },
+                                  },
+                                },
+                                [
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass: "h-6 w-6",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        fill: "none",
+                                        viewBox: "0 0 24 24",
+                                        stroke: "currentColor",
+                                      },
+                                    },
+                                    [
+                                      _c("path", {
+                                        attrs: {
+                                          "stroke-linecap": "round",
+                                          "stroke-linejoin": "round",
+                                          "stroke-width": "2",
+                                          d: "M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z",
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                ]
+                              )
+                            : _vm._e(),
+                        ],
+                        1
+                      ),
                     ]),
                   ])
                 }),

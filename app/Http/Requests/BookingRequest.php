@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Models\Booking;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
@@ -38,7 +39,7 @@ class BookingRequest extends FormRequest
 
             'date' => [
                 'required',
-                'date_format:d-m-Y',
+                'date_format:Y-m-d',
             ],
 
             'to' => [
@@ -59,8 +60,8 @@ class BookingRequest extends FormRequest
 
         $booking->room_id = $this->room;
         $booking->date = $this->date;
-        $booking->from = $this->from;
-        $booking->to = $this->to;
+        $booking->from = Carbon::create("{$this->date} {$this->from}");
+        $booking->to = Carbon::create("{$this->date} {$this->to}");
         $booking->created_by = Auth::id();
 
         $booking->save();
