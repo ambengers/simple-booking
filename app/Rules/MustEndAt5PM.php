@@ -42,6 +42,6 @@ class MustEndAt5PM implements Rule
      */
     public function message()
     {
-        return 'The :attribute must begin at 5pm.';
+        return 'The :attribute must end at 5pm.';
     }
 }
