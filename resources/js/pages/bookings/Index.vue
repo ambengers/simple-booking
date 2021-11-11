@@ -1,15 +1,33 @@
 <template>
     <layout>
-        <div class="mb-4" v-if="isAuthenticated">
-            <router-link
-                :to="{
-                    name: 'bookings.store',
-                }"
-                class="btn btn-primary"
-            >
-                Create Booking
-            </router-link>
+        <div class="row">
+            <div class="col-sm-6">
+                <filter-layout @clear="clearFilters">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select-input
+                                :label="'Room'"
+                                :options="rooms"
+                                :nullable="true"
+                                v-model="filters.room"
+                                @update="loadBookings()"
+                            ></select-input>
+                        </div>
+                    </div>
+                </filter-layout>
+            </div>
+            <div class="col-sm-6 text-right">
+                <div class="mb-4" v-if="isAuthenticated">
+                    <router-link
+                        :to="{ name: 'bookings.store' }"
+                        class="btn btn-primary"
+                    >
+                        Create Booking
+                    </router-link>
+                </div>
+            </div>
         </div>
+
         <table
             class="table table-striped text-left table-sm text-sm w-full mb-8"
         >
@@ -170,13 +188,22 @@
 </template>
 <script>
 import { Auth } from "@mixins";
+
+const filtersDefault = {
+    room: "",
+};
+
 export default {
     mixins: [Auth],
     data() {
         return {
             bookings: null,
 
-            perPage: 15,
+            filters: {
+                ...filtersDefault,
+            },
+
+            rooms: [],
 
             sortField: "",
             sortDirection: "desc",
@@ -188,6 +215,7 @@ export default {
 
     mounted() {
         this.loadBookings();
+        this.loadRooms();
     },
 
     filters: {
@@ -207,8 +235,8 @@ export default {
             return axios
                 .get("/api/bookings", {
                     params: {
+                        ...this.filters,
                         page,
-                        per_page: this.perPage,
                         ...params,
                         load: "room,creator",
                     },
@@ -216,6 +244,17 @@ export default {
                 .then(({ data }) => {
                     this.bookings = data;
                 });
+        },
+
+        loadRooms() {
+            return axios.get("/api/rooms").then(({ data }) => {
+                this.rooms = data.data.map((room) => {
+                    return {
+                        label: room.name,
+                        value: room.id,
+                    };
+                });
+            });
         },
 
         sort(field) {
@@ -226,6 +265,11 @@ export default {
 
         goToPage(page) {
             this.loadBookings(page);
+        },
+
+        clearFilters() {
+            this.filters = { ...filtersDefault };
+            this.loadBookings();
         },
 
         destroy() {

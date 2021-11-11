@@ -188,13 +188,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
+var filtersDefault = {
+  room: ""
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
   data: function data() {
     return {
       bookings: null,
-      perPage: 15,
+      filters: _objectSpread({}, filtersDefault),
+      rooms: [],
       sortField: "",
       sortDirection: "desc",
       resourceToDestroy: null,
@@ -203,6 +225,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   mounted: function mounted() {
     this.loadBookings();
+    this.loadRooms();
   },
   filters: {
     formatDate: function formatDate(date) {
@@ -218,15 +241,27 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       var page = navigationPage || 1;
       return axios.get("/api/bookings", {
-        params: _objectSpread(_objectSpread({
-          page: page,
-          per_page: this.perPage
+        params: _objectSpread(_objectSpread(_objectSpread({}, this.filters), {}, {
+          page: page
         }, params), {}, {
           load: "room,creator"
         })
       }).then(function (_ref) {
         var data = _ref.data;
         _this.bookings = data;
+      });
+    },
+    loadRooms: function loadRooms() {
+      var _this2 = this;
+
+      return axios.get("/api/rooms").then(function (_ref2) {
+        var data = _ref2.data;
+        _this2.rooms = data.data.map(function (room) {
+          return {
+            label: room.name,
+            value: room.id
+          };
+        });
       });
     },
     sort: function sort(field) {
@@ -238,16 +273,20 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     goToPage: function goToPage(page) {
       this.loadBookings(page);
     },
+    clearFilters: function clearFilters() {
+      this.filters = _objectSpread({}, filtersDefault);
+      this.loadBookings();
+    },
     destroy: function destroy() {
-      var _this2 = this;
+      var _this3 = this;
 
       var id = this.resourceToDestroy.id;
       return axios["delete"]("/api/bookings/".concat(id, "/destroy")).then(function () {
-        _this2.bookings.data = _this2.bookings.data.filter(function (item) {
+        _this3.bookings.data = _this3.bookings.data.filter(function (item) {
           return item.id != id;
         });
 
-        _this2.closeDeleteModal();
+        _this3.closeDeleteModal();
       });
     },
     openDeleteModal: function openDeleteModal(booking) {
@@ -350,27 +389,69 @@ var render = function () {
   return _c(
     "layout",
     [
-      _vm.isAuthenticated
-        ? _c(
-            "div",
-            { staticClass: "mb-4" },
-            [
-              _c(
-                "router-link",
-                {
-                  staticClass: "btn btn-primary",
-                  attrs: {
-                    to: {
-                      name: "bookings.store",
+      _c("div", { staticClass: "row" }, [
+        _c(
+          "div",
+          { staticClass: "col-sm-6" },
+          [
+            _c("filter-layout", { on: { clear: _vm.clearFilters } }, [
+              _c("div", { staticClass: "row" }, [
+                _c(
+                  "div",
+                  { staticClass: "col-md-12" },
+                  [
+                    _c("select-input", {
+                      attrs: {
+                        label: "Room",
+                        options: _vm.rooms,
+                        nullable: true,
+                      },
+                      on: {
+                        update: function ($event) {
+                          return _vm.loadBookings()
+                        },
+                      },
+                      model: {
+                        value: _vm.filters.room,
+                        callback: function ($$v) {
+                          _vm.$set(_vm.filters, "room", $$v)
+                        },
+                        expression: "filters.room",
+                      },
+                    }),
+                  ],
+                  1
+                ),
+              ]),
+            ]),
+          ],
+          1
+        ),
+        _vm._v(" "),
+        _c("div", { staticClass: "col-sm-6 text-right" }, [
+          _vm.isAuthenticated
+            ? _c(
+                "div",
+                { staticClass: "mb-4" },
+                [
+                  _c(
+                    "router-link",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: { to: { name: "bookings.store" } },
                     },
-                  },
-                },
-                [_vm._v("\n            Create Booking\n        ")]
-              ),
-            ],
-            1
-          )
-        : _vm._e(),
+                    [
+                      _vm._v(
+                        "\n                    Create Booking\n                "
+                      ),
+                    ]
+                  ),
+                ],
+                1
+              )
+            : _vm._e(),
+        ]),
+      ]),
       _vm._v(" "),
       _c(
         "table",
