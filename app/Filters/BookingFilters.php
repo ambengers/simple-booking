@@ -30,5 +30,6 @@ class BookingFilters extends AbstractQueryFilter
      */
     protected $filters = [
         'room' => \App\Filters\Booking\Room::class,
+        'creator' => \App\Filters\Booking\Creator::class,
     ];
 }

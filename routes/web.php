@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthenticatedUsersController;
 use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\RoomsController;
 use App\Http\Controllers\SpaController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'api'], function () {
@@ -19,6 +20,7 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     Route::get('rooms', [RoomsController::class, 'index'])->name('rooms.index');
+    Route::get('users', [UsersController::class, 'index'])->name('users.index');
 
     Route::get('authenticated-user', [AuthenticatedUsersController::class, 'handle'])->name('auth.user');
 });

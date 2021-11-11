@@ -13,6 +13,15 @@
                                 @update="loadBookings()"
                             ></select-input>
                         </div>
+                        <div class="col-md-12" v-if="isAuthenticated">
+                            <select-input
+                                :label="'Booked By'"
+                                :options="users"
+                                :nullable="true"
+                                v-model="filters.creator"
+                                @update="loadBookings()"
+                            ></select-input>
+                        </div>
                     </div>
                 </filter-layout>
             </div>
@@ -191,6 +200,7 @@ import { Auth } from "@mixins";
 
 const filtersDefault = {
     room: "",
+    creator: "",
 };
 
 export default {
@@ -216,6 +226,7 @@ export default {
     mounted() {
         this.loadBookings();
         this.loadRooms();
+        this.loadUsers();
     },
 
     filters: {
@@ -252,6 +263,17 @@ export default {
                     return {
                         label: room.name,
                         value: room.id,
+                    };
+                });
+            });
+        },
+
+        loadUsers() {
+            return axios.get("/api/users").then(({ data }) => {
+                this.users = data.data.map((user) => {
+                    return {
+                        label: user.full_name,
+                        value: user.id,
                     };
                 });
             });

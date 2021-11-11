@@ -206,9 +206,19 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 var filtersDefault = {
-  room: ""
+  room: "",
+  creator: ""
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
@@ -226,6 +236,7 @@ var filtersDefault = {
   mounted: function mounted() {
     this.loadBookings();
     this.loadRooms();
+    this.loadUsers();
   },
   filters: {
     formatDate: function formatDate(date) {
@@ -264,6 +275,19 @@ var filtersDefault = {
         });
       });
     },
+    loadUsers: function loadUsers() {
+      var _this3 = this;
+
+      return axios.get("/api/users").then(function (_ref3) {
+        var data = _ref3.data;
+        _this3.users = data.data.map(function (user) {
+          return {
+            label: user.full_name,
+            value: user.id
+          };
+        });
+      });
+    },
     sort: function sort(field) {
       this.sortDirection = this.sortDirection == "desc" ? "asc" : "desc";
       this.loadBookings(1, {
@@ -278,15 +302,15 @@ var filtersDefault = {
       this.loadBookings();
     },
     destroy: function destroy() {
-      var _this3 = this;
+      var _this4 = this;
 
       var id = this.resourceToDestroy.id;
       return axios["delete"]("/api/bookings/".concat(id, "/destroy")).then(function () {
-        _this3.bookings.data = _this3.bookings.data.filter(function (item) {
+        _this4.bookings.data = _this4.bookings.data.filter(function (item) {
           return item.id != id;
         });
 
-        _this3.closeDeleteModal();
+        _this4.closeDeleteModal();
       });
     },
     openDeleteModal: function openDeleteModal(booking) {
@@ -422,6 +446,35 @@ var render = function () {
                   ],
                   1
                 ),
+                _vm._v(" "),
+                _vm.isAuthenticated
+                  ? _c(
+                      "div",
+                      { staticClass: "col-md-12" },
+                      [
+                        _c("select-input", {
+                          attrs: {
+                            label: "Booked By",
+                            options: _vm.users,
+                            nullable: true,
+                          },
+                          on: {
+                            update: function ($event) {
+                              return _vm.loadBookings()
+                            },
+                          },
+                          model: {
+                            value: _vm.filters.creator,
+                            callback: function ($$v) {
+                              _vm.$set(_vm.filters, "creator", $$v)
+                            },
+                            expression: "filters.creator",
+                          },
+                        }),
+                      ],
+                      1
+                    )
+                  : _vm._e(),
               ]),
             ]),
           ],
