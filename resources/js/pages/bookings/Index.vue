@@ -14,11 +14,46 @@
             class="table table-striped text-left table-sm text-sm w-full mb-8"
         >
             <thead>
-                <th class="text-center">Room</th>
-                <th class="text-center">Date</th>
-                <th class="text-center">From</th>
-                <th class="text-center">To</th>
-                <th class="text-center">Booked By</th>
+                <th class="text-center">
+                    <button
+                        class="btn-link text-black font-bold"
+                        @click="sort('room.name')"
+                    >
+                        Room
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button
+                        class="btn-link text-black font-bold"
+                        @click="sort('date')"
+                    >
+                        Date
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button
+                        class="btn-link text-black font-bold"
+                        @click="sort('from')"
+                    >
+                        From
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button
+                        class="btn-link text-black font-bold"
+                        @click="sort('to')"
+                    >
+                        To
+                    </button>
+                </th>
+                <th class="text-center">
+                    <button
+                        class="btn-link text-black font-bold"
+                        @click="sort('creator.full_name')"
+                    >
+                        Booked By
+                    </button>
+                </th>
                 <th class="text-center">Actions</th>
             </thead>
             <tbody v-if="bookings && bookings.data.length > 0">
@@ -143,13 +178,16 @@ export default {
 
             perPage: 15,
 
+            sortField: "",
+            sortDirection: "desc",
+
             resourceToDestroy: null,
             deleting: false,
         };
     },
 
     mounted() {
-        this.getbookings();
+        this.loadBookings();
     },
 
     filters: {
@@ -163,7 +201,7 @@ export default {
     },
 
     methods: {
-        getbookings(navigationPage, params) {
+        loadBookings(navigationPage, params) {
             let page = navigationPage || 1;
 
             return axios
@@ -180,8 +218,14 @@ export default {
                 });
         },
 
+        sort(field) {
+            this.sortDirection = this.sortDirection == "desc" ? "asc" : "desc";
+
+            this.loadBookings(1, { sort: `${field}|${this.sortDirection}` });
+        },
+
         goToPage(page) {
-            this.getbookings(page);
+            this.loadBookings(page);
         },
 
         destroy() {

@@ -153,6 +153,41 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
@@ -160,12 +195,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       bookings: null,
       perPage: 15,
+      sortField: "",
+      sortDirection: "desc",
       resourceToDestroy: null,
       deleting: false
     };
   },
   mounted: function mounted() {
-    this.getbookings();
+    this.loadBookings();
   },
   filters: {
     formatDate: function formatDate(date) {
@@ -176,7 +213,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     }
   },
   methods: {
-    getbookings: function getbookings(navigationPage, params) {
+    loadBookings: function loadBookings(navigationPage, params) {
       var _this = this;
 
       var page = navigationPage || 1;
@@ -192,8 +229,14 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         _this.bookings = data;
       });
     },
+    sort: function sort(field) {
+      this.sortDirection = this.sortDirection == "desc" ? "asc" : "desc";
+      this.loadBookings(1, {
+        sort: "".concat(field, "|").concat(this.sortDirection)
+      });
+    },
     goToPage: function goToPage(page) {
-      this.getbookings(page);
+      this.loadBookings(page);
     },
     destroy: function destroy() {
       var _this2 = this;
@@ -337,15 +380,80 @@ var render = function () {
         },
         [
           _c("thead", [
-            _c("th", { staticClass: "text-center" }, [_vm._v("Room")]),
+            _c("th", { staticClass: "text-center" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn-link text-black font-bold",
+                  on: {
+                    click: function ($event) {
+                      return _vm.sort("room.name")
+                    },
+                  },
+                },
+                [_vm._v("\n                    Room\n                ")]
+              ),
+            ]),
             _vm._v(" "),
-            _c("th", { staticClass: "text-center" }, [_vm._v("Date")]),
+            _c("th", { staticClass: "text-center" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn-link text-black font-bold",
+                  on: {
+                    click: function ($event) {
+                      return _vm.sort("date")
+                    },
+                  },
+                },
+                [_vm._v("\n                    Date\n                ")]
+              ),
+            ]),
             _vm._v(" "),
-            _c("th", { staticClass: "text-center" }, [_vm._v("From")]),
+            _c("th", { staticClass: "text-center" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn-link text-black font-bold",
+                  on: {
+                    click: function ($event) {
+                      return _vm.sort("from")
+                    },
+                  },
+                },
+                [_vm._v("\n                    From\n                ")]
+              ),
+            ]),
             _vm._v(" "),
-            _c("th", { staticClass: "text-center" }, [_vm._v("To")]),
+            _c("th", { staticClass: "text-center" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn-link text-black font-bold",
+                  on: {
+                    click: function ($event) {
+                      return _vm.sort("to")
+                    },
+                  },
+                },
+                [_vm._v("\n                    To\n                ")]
+              ),
+            ]),
             _vm._v(" "),
-            _c("th", { staticClass: "text-center" }, [_vm._v("Booked By")]),
+            _c("th", { staticClass: "text-center" }, [
+              _c(
+                "button",
+                {
+                  staticClass: "btn-link text-black font-bold",
+                  on: {
+                    click: function ($event) {
+                      return _vm.sort("creator.full_name")
+                    },
+                  },
+                },
+                [_vm._v("\n                    Booked By\n                ")]
+              ),
+            ]),
             _vm._v(" "),
             _c("th", { staticClass: "text-center" }, [_vm._v("Actions")]),
           ]),
