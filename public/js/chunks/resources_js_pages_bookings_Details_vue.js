@@ -48,10 +48,10 @@ __webpack_require__.r(__webpack_exports__);
   },
   filters: {
     formatDate: function formatDate(date) {
-      return moment(date).format("Y-MM-DD");
+      return moment.utc(date).format("DD-MM-YYYY");
     },
     formatTime: function formatTime(time) {
-      return moment(time).format("HH:MM a");
+      return moment.utc(time).format("HH:mm");
     }
   },
   methods: {

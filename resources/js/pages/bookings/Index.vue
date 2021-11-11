@@ -92,6 +92,35 @@
                                     />
                                 </svg>
                             </router-link>
+                            <button
+                                v-if="
+                                    isAuthenticated &&
+                                    auth.user.id == booking.created_by
+                                "
+                                @click="openDeleteModal(booking)"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6 text-red-600"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                                    />
+                                </svg>
+                            </button>
+                            <modal
+                                v-show="deleting"
+                                title="Confirmation"
+                                message="Are you sure you want to delete the booking?"
+                                @confirm="destroy"
+                                @close="closeDeleteModal"
+                            ></modal>
                         </div>
                     </td>
                 </tr>
@@ -112,11 +141,10 @@ export default {
         return {
             bookings: null,
 
-            resourceToDestroy: null,
-
-            deleting: false,
-
             perPage: 15,
+
+            resourceToDestroy: null,
+            deleting: false,
         };
     },
 
@@ -126,11 +154,11 @@ export default {
 
     filters: {
         formatDate(date) {
-            return moment(date).format("DD-MM-Y");
+            return moment.utc(date).format("DD-MM-YYYY");
         },
 
         formatTime(time) {
-            return moment(time).format("HH:MM a");
+            return moment.utc(time).format("HH:mm");
         },
     },
 
@@ -154,6 +182,27 @@ export default {
 
         goToPage(page) {
             this.getbookings(page);
+        },
+
+        destroy() {
+            let { id } = this.resourceToDestroy;
+
+            return axios.delete(`/api/bookings/${id}/destroy`).then(() => {
+                this.bookings.data = this.bookings.data.filter((item) => {
+                    return item.id != id;
+                });
+                this.closeDeleteModal();
+            });
+        },
+
+        openDeleteModal(booking) {
+            this.resourceToDestroy = booking;
+            this.deleting = true;
+        },
+
+        closeDeleteModal() {
+            this.resourceToDestroy = null;
+            this.deleting = false;
         },
     },
 };

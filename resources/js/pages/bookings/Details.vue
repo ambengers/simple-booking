@@ -36,11 +36,11 @@ export default {
     },
     filters: {
         formatDate(date) {
-            return moment(date).format("Y-MM-DD");
+            return moment.utc(date).format("DD-MM-YYYY");
         },
 
         formatTime(time) {
-            return moment(time).format("HH:MM a");
+            return moment.utc(time).format("HH:mm");
         },
     },
     methods: {

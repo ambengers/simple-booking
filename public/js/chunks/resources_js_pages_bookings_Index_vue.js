@@ -124,15 +124,44 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
   data: function data() {
     return {
       bookings: null,
+      perPage: 15,
       resourceToDestroy: null,
-      deleting: false,
-      perPage: 15
+      deleting: false
     };
   },
   mounted: function mounted() {
@@ -140,10 +169,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   filters: {
     formatDate: function formatDate(date) {
-      return moment(date).format("DD-MM-Y");
+      return moment.utc(date).format("DD-MM-YYYY");
     },
     formatTime: function formatTime(time) {
-      return moment(time).format("HH:MM a");
+      return moment.utc(time).format("HH:mm");
     }
   },
   methods: {
@@ -165,6 +194,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     goToPage: function goToPage(page) {
       this.getbookings(page);
+    },
+    destroy: function destroy() {
+      var _this2 = this;
+
+      var id = this.resourceToDestroy.id;
+      return axios["delete"]("/api/bookings/".concat(id, "/destroy")).then(function () {
+        _this2.bookings.data = _this2.bookings.data.filter(function (item) {
+          return item.id != id;
+        });
+
+        _this2.closeDeleteModal();
+      });
+    },
+    openDeleteModal: function openDeleteModal(booking) {
+      this.resourceToDestroy = booking;
+      this.deleting = true;
+    },
+    closeDeleteModal: function closeDeleteModal() {
+      this.resourceToDestroy = null;
+      this.deleting = false;
     }
   }
 });
@@ -432,6 +481,64 @@ var render = function () {
                                 ]
                               )
                             : _vm._e(),
+                          _vm._v(" "),
+                          _vm.isAuthenticated &&
+                          _vm.auth.user.id == booking.created_by
+                            ? _c(
+                                "button",
+                                {
+                                  on: {
+                                    click: function ($event) {
+                                      return _vm.openDeleteModal(booking)
+                                    },
+                                  },
+                                },
+                                [
+                                  _c(
+                                    "svg",
+                                    {
+                                      staticClass: "h-6 w-6 text-red-600",
+                                      attrs: {
+                                        xmlns: "http://www.w3.org/2000/svg",
+                                        fill: "none",
+                                        viewBox: "0 0 24 24",
+                                        stroke: "currentColor",
+                                      },
+                                    },
+                                    [
+                                      _c("path", {
+                                        attrs: {
+                                          "stroke-linecap": "round",
+                                          "stroke-linejoin": "round",
+                                          "stroke-width": "2",
+                                          d: "M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16",
+                                        },
+                                      }),
+                                    ]
+                                  ),
+                                ]
+                              )
+                            : _vm._e(),
+                          _vm._v(" "),
+                          _c("modal", {
+                            directives: [
+                              {
+                                name: "show",
+                                rawName: "v-show",
+                                value: _vm.deleting,
+                                expression: "deleting",
+                              },
+                            ],
+                            attrs: {
+                              title: "Confirmation",
+                              message:
+                                "Are you sure you want to delete the booking?",
+                            },
+                            on: {
+                              confirm: _vm.destroy,
+                              close: _vm.closeDeleteModal,
+                            },
+                          }),
                         ],
                         1
                       ),
