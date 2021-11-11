@@ -3,6 +3,7 @@
 namespace App\Filters;
 
 use Ambengers\QueryFilter\AbstractQueryFilter;
+use App\Loaders\BookingLoaders;
 
 class BookingFilters extends AbstractQueryFilter
 {
@@ -11,7 +12,7 @@ class BookingFilters extends AbstractQueryFilter
      *
      * @var string
      */
-    protected $loader = '';
+    protected $loader = BookingLoaders::class;
 
     /**
      * Columns that are searchable.

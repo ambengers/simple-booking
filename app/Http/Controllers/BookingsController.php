@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Filters\BookingFilters;
 use App\Http\Requests\BookingRequest;
 use App\Http\Resources\BookingResource;
+use App\Loaders\BookingLoaders;
 use App\Models\Booking;
 use Illuminate\Support\Facades\Auth;
 
 class BookingsController extends Controller
 {
-    public function index()
+    public function index(BookingFilters $filters)
     {
-        $bookings = Booking::all();
+        $bookings = Booking::filter($filters);
 
         return BookingResource::collection($bookings);
     }
@@ -21,8 +23,10 @@ class BookingsController extends Controller
         return new BookingResource($request->persist());
     }
 
-    public function show(Booking $booking)
+    public function show(Booking $booking, BookingLoaders $loaders)
     {
+        $booking = $booking->filter($loaders);
+
         return new BookingResource($booking);
     }
 
