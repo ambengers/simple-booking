@@ -7,6 +7,7 @@ import Loading from "@components/Loading.vue";
 import router from "./router";
 
 import "@/components";
+import "@/mixins";
 
 axios.interceptors.response.use(
     (response) => response,

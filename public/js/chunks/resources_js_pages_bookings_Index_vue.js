@@ -11,6 +11,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var _mixins__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @mixins */ "./resources/js/mixins/index.js");
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -48,7 +49,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  mixins: [_mixins__WEBPACK_IMPORTED_MODULE_0__.Auth],
   data: function data() {
     return {
       bookings: null,
@@ -197,30 +204,23 @@ var render = function () {
     [
       _c(
         "table",
-        { staticClass: "table table-bordered text-left w-full mb-8" },
+        {
+          staticClass:
+            "table table-striped text-left table-sm text-sm w-full mb-8",
+        },
         [
           _c("thead", [
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [
-              _vm._v("Room"),
-            ]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("Room")]),
             _vm._v(" "),
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [
-              _vm._v("Date"),
-            ]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("Date")]),
             _vm._v(" "),
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [
-              _vm._v("From"),
-            ]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("From")]),
             _vm._v(" "),
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [_vm._v("To")]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("To")]),
             _vm._v(" "),
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [
-              _vm._v("Booked By"),
-            ]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("Booked By")]),
             _vm._v(" "),
-            _c("th", { staticClass: "p-4 w-1/4 text-center" }, [
-              _vm._v("Actions"),
-            ]),
+            _c("th", { staticClass: "text-center" }, [_vm._v("Actions")]),
           ]),
           _vm._v(" "),
           _vm.bookings && _vm.bookings.data.length > 0
@@ -232,8 +232,12 @@ var render = function () {
                       _vm._v(_vm._s(booking.room.name)),
                     ]),
                     _vm._v(" "),
-                    _c("td", { staticClass: "px-2" }, [
-                      _vm._v(_vm._s(_vm._f("formatDate")(booking.date))),
+                    _c("td", { staticClass: "px-2 text-center" }, [
+                      _vm._v(
+                        "\n                    " +
+                          _vm._s(_vm._f("formatDate")(booking.date)) +
+                          "\n                "
+                      ),
                     ]),
                     _vm._v(" "),
                     _c("td", { staticClass: "text-center px-2" }, [

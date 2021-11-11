@@ -1,13 +1,13 @@
 <template>
-    <div
-        class="flex flex-row justify-end content-center items-stretch"
-        v-show="links && links.total > 0"
-    >
-        <ul class="flex flex-row items-stretch">
-            <li
-                class="px-3 py-2 text-sm border border-gray-300"
-                v-if="links.current_page > 1"
-            >
+    <div class="pagination mt-3" v-show="links && links.total > 0">
+        <span class="showing">
+            Showing
+            <span class="item">{{ links && links.from }}</span> to
+            <span class="item">{{ links && links.to }}</span> of
+            {{ links && links.total }} items
+        </span>
+        <ul class="pagination">
+            <li class="page-item" v-if="links.current_page > 1">
                 <button
                     @click="navigate(links.current_page - 1)"
                     class="page-link btn btn-sm"
@@ -17,8 +17,8 @@
             </li>
             <template v-for="(link, index) in items">
                 <li
-                    class="px-3 py-2 text-sm border border-gray-300"
-                    :class="link.active && 'bg-gray-300'"
+                    class="page-item"
+                    :class="link.active && 'active'"
                     :key="index"
                 >
                     <button
@@ -29,10 +29,7 @@
                     </button>
                 </li>
             </template>
-            <li
-                class="px-3 py-2 text-sm border border-gray-300"
-                v-if="links.current_page < links.last_page"
-            >
+            <li class="page-item" v-if="links.current_page < links.last_page">
                 <button
                     @click="navigate(links.current_page + 1)"
                     class="page-link btn btn-sm"
@@ -126,3 +123,29 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.pagination {
+    justify-content: space-between;
+}
+.pagination .showing {
+    line-height: 28px;
+    font-size: 12px;
+    color: #9a959a;
+}
+.pagination .showing .item {
+    font-weight: 600;
+}
+.pagination .page-item.active .page-link {
+    background-color: #315f44;
+    border-color: #315f44;
+    color: #ffffff;
+}
+.pagination .page-item .page-link {
+    border-radius: 0;
+    color: #9a959a;
+}
+.pagination .page-item .page-link:focus {
+    box-shadow: none;
+}
+</style>

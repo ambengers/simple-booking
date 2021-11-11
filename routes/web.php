@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthenticatedUsersController;
 use App\Http\Controllers\BookingsController;
 use App\Http\Controllers\SpaController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,8 @@ Route::group(['prefix' => '/api/bookings', 'as' => 'bookings.'], function () {
         Route::delete('{booking}/destroy', [BookingsController::class, 'destroy'])->name('destroy');
     });
 });
+
+Route::get('api/authenticated-user', [AuthenticatedUsersController::class, 'handle'])->name('auth.user');
 
 Auth::routes();
 

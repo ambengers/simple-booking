@@ -21,9 +21,14 @@
 <body>
     <div id="app">
         <loading ref="loading"></loading>
+
         @include('partials.nav')
-        <router-view></router-view>
+
+        <main class="py-4">
+            @yield('content')
+        </main>
     </div>
+
     <!-- Scripts -->
     <script src="{{ mix('/js/app.js') }}"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>

@@ -1,18 +1,22 @@
 <template>
     <layout>
-        <table class="table table-bordered text-left w-full mb-8">
+        <table
+            class="table table-striped text-left table-sm text-sm w-full mb-8"
+        >
             <thead>
-                <th class="p-4 w-1/4 text-center">Room</th>
-                <th class="p-4 w-1/4 text-center">Date</th>
-                <th class="p-4 w-1/4 text-center">From</th>
-                <th class="p-4 w-1/4 text-center">To</th>
-                <th class="p-4 w-1/4 text-center">Booked By</th>
-                <th class="p-4 w-1/4 text-center">Actions</th>
+                <th class="text-center">Room</th>
+                <th class="text-center">Date</th>
+                <th class="text-center">From</th>
+                <th class="text-center">To</th>
+                <th class="text-center">Booked By</th>
+                <th class="text-center">Actions</th>
             </thead>
             <tbody v-if="bookings && bookings.data.length > 0">
                 <tr v-for="(booking, key) in bookings.data" :key="key">
                     <td class="px-2">{{ booking.room.name }}</td>
-                    <td class="px-2">{{ booking.date | formatDate }}</td>
+                    <td class="px-2 text-center">
+                        {{ booking.date | formatDate }}
+                    </td>
                     <td class="text-center px-2">{{ booking.from }}</td>
                     <td class="text-center px-2">{{ booking.to }}</td>
                     <td class="text-center px-2">
@@ -30,7 +34,9 @@
     </layout>
 </template>
 <script>
+import { Auth } from "@mixins";
 export default {
+    mixins: [Auth],
     data() {
         return {
             bookings: null,
