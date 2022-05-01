@@ -12,6 +12,8 @@
 
 -   Clone the repository
 -   Run `cd to/the/app/directory`
+-   Run `cp .env.example .env`
+-   Update the `.env` file with your own credentials
 -   Run `composer install`
 -   Run `php artisan migrate`
 -   Run `npm install`
