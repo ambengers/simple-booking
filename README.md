@@ -5,7 +5,7 @@
 -   PHP at least 7.3
 -   Nginx
 -   NodeJS
--   MySql
+-   MySQL
 -   Composer
 
 ## Setup
